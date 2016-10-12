@@ -23,15 +23,27 @@ module.exports.authenticate = function(req, res){
 
 module.exports.addUser = function(req, res){
     var newUser = new User({"name" : req.body.name, "password": req.body.password});
-    newUser.save(function(error, result){
-        if(error){
-            res.status(400);
-            res.send("Bad request");
-        } else {
-            res.status(200);
-            res.send("user registered!");
+
+    User.findOne({'name': req.body.name}, 'name').exec(function (err, user){
+        if(err){
+            res.send(err);
+        } else{
+            if(user == null){
+                newUser.save(function(error, result){
+                    if(error){
+                        res.status(400);
+                        res.send("Bad request");
+                    } else {
+                        res.status(200);
+                        res.send("user registered!");
+                    }
+                })
+            } else {
+                res.status(400);
+                res.send("That username is taken!");
+            }
         }
-    })
+    });
 };
 
 module.exports.getAllUsers = function (req, res) {
