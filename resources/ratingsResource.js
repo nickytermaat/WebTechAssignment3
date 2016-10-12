@@ -30,11 +30,54 @@ module.exports.addRating = function (req, res) {
 };
 
 module.exports.updateRating = function(req, res){
+    var token = req.headers["authentication"];
 
+    jwt.verify(token, "Thisismysecretkey", function (error, result) {
+        if (error) {
+            res.status(401);
+            res.send(error);
+        } else {
+            var conditions = {
+                "ttNumber" : req.body.ttNumber,
+                "userName" : result.username
+            };
+            var update = {
+                "stars" : req.body.stars
+            }
+            Rating.update(conditions, update).exec(function(error, result){
+               if(error){
+                   res.status(400);
+                   res.send("bad request.");
+               } else {
+                   res.send("Rating updated");
+               }
+            });
+        }
+    });
 };
 
 module.exports.deleteRating = function(req, res){
+    var token = req.headers["authentication"];
 
+    jwt.verify(token, "Thisismysecretkey", function (error, result) {
+        if (error) {
+            res.status(401);
+            res.send(error);
+        } else {
+            var conditions = {
+                "ttNumber" : req.body.ttNumber,
+                "userName" : result.username
+            };
+            Rating.remove(conditions).exec(function(error, result){
+                if(error){
+                    res.status(400);
+                    res.send("bad request.");
+                } else {
+                    res.send("Rating deleted");
+                }
+            });
+        }
+    });
 };
 
 module.exports.getAvgForMovie = function(req, res){
