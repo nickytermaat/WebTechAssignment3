@@ -9,13 +9,16 @@ module.exports.authenticate = function(req, res){
     //Check if username and password are correct.
     User.findOne({'name': req.body.name, 'password' : req.body.password}, 'name').exec(function (err, user){
         if(err){
-            res.send(err);
+            res.status(400);
+            res.json(err);
         } else{
             if(user != null){
+                res.status(200);
                 var token = jwt.sign({username: user.name, field:'data'}, "Thisismysecretkey");
-                res.send(token);
+                res.json({"Token" :token});
             } else {
-                res.send("Wrong username or password");
+                res.status(400);
+                res.json({"Error" : "Wrong username or password"});
             }
         }
     });
@@ -32,15 +35,15 @@ module.exports.addUser = function(req, res){
                 newUser.save(function(error, result){
                     if(error){
                         res.status(400);
-                        res.send("Bad request");
+                        res.json({"Error" : "Bad request"});
                     } else {
                         res.status(200);
-                        res.send("user registered!");
+                        res.json({"Success" : "user registered!"});
                     }
                 })
             } else {
                 res.status(400);
-                res.send("That username is taken!");
+                res.json({"Error" : "That username is taken!"});
             }
         }
     });
@@ -98,4 +101,10 @@ module.exports.getUser = function (req, res) {
             })
         }
     });
+};
+
+module.exports.drop = function () {
+    User.remove({}, function (err) {
+        console.log("Users Dropped");
+    })
 };

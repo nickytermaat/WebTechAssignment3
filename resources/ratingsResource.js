@@ -4,25 +4,22 @@
 var Rating = require('ratingSchema.js');
 var jwt = require("jsonwebtoken");
 
-//Add rating
-//Update rating
-//Delete rating
 module.exports.addRating = function (req, res) {
     var token = req.headers["authentication"];
 
     jwt.verify(token, "Thisismysecretkey", function (error, result) {
         if (error) {
             res.status(401);
-            res.send(error);
+            res.json({"Error" : error});
         } else {
             var rating = new Rating({"userName": result.username, "ttNumber" : req.body.ttNumber, "stars" : req.body.stars});
             rating.save(function(error, result){
                 if(error){
                     res.status(400);
-                    res.send("Bad request");
+                    res.json({"Error" : "Bad request"});
                 } else {
                     res.status(200);
-                    res.send("Rating was added successfully");
+                    res.json({"Success" : "Rating was added successfully"});
                 }
             });
         }
@@ -35,7 +32,7 @@ module.exports.updateRating = function(req, res){
     jwt.verify(token, "Thisismysecretkey", function (error, result) {
         if (error) {
             res.status(401);
-            res.send(error);
+            res.json({"Error" : error});
         } else {
             var conditions = {
                 "ttNumber" : req.body.ttNumber,
@@ -45,12 +42,12 @@ module.exports.updateRating = function(req, res){
                 "stars" : req.body.stars
             }
             Rating.update(conditions, update).exec(function(error, result){
-               if(error){
-                   res.status(400);
-                   res.send("bad request.");
-               } else {
-                   res.send("Rating updated");
-               }
+                if(error){
+                    res.status(400);
+                    res.json({"Error" : "bad request."});
+                } else {
+                    res.json({"Success" : "Rating updated"});
+                }
             });
         }
     });
@@ -62,7 +59,7 @@ module.exports.deleteRating = function(req, res){
     jwt.verify(token, "Thisismysecretkey", function (error, result) {
         if (error) {
             res.status(401);
-            res.send(error);
+            res.json({"Error" :error});
         } else {
             var conditions = {
                 "ttNumber" : req.body.ttNumber,
@@ -71,9 +68,9 @@ module.exports.deleteRating = function(req, res){
             Rating.remove(conditions).exec(function(error, result){
                 if(error){
                     res.status(400);
-                    res.send("bad request.");
+                    res.json({"Error" : "bad request."});
                 } else {
-                    res.send("Rating deleted");
+                    res.json({"Success" : "Rating deleted"});
                 }
             });
         }
@@ -84,15 +81,20 @@ module.exports.getAvgForMovie = function(req, res){
     Rating.find({"ttNumber" : req.params.ttNumber}, "stars").exec(function(error, result){
         if(error) {
             res.status(400);
-            res.send("Bad request");
+            res.json({"Error" : "Bad request"});
         } else {
-            // res.send(result);
-            var total = 0;
-            for(var i = 0; i < result.length; i++){
-                total += result[i]['stars'];
-            }
+            if(result.length >0){
+                // res.send(result);
+                var total = 0;
+                for(var i = 0; i < result.length; i++){
+                    total += result[i]['stars'];
+                }
 
-            res.send((total / result.length)+"");
+                res.json({"Average" : (total / result.length)});
+            } else {
+                res.status(400);
+                res.json({"Error" : "That movie was not found"});
+            }
         }
     });
 };
@@ -103,16 +105,22 @@ module.exports.getRatingsForUser = function(req, res){
     jwt.verify(token, "Thisismysecretkey", function (error, result) {
         if (error) {
             res.status(401);
-            res.send(error);
+            res.json({"Error" : error});
         } else {
             Rating.find({userName : result.username}, {'ttNumber': 1, 'stars' : 1}).exec(function(error, result){
                 if(errors){
                     res.status(400);
-                    res.send("Bad request!");
+                    res.json({"Error" : "Bad request!"});
                 } else {
-                    res.send(result);
+                    res.json({"Result" : result});
                 }
             });
         }
     });
+};
+
+module.exports.drop = function () {
+    Rating.remove({}, function (err) {
+        console.log("Ratings Dropped");
+    })
 };

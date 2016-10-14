@@ -16,7 +16,7 @@ module.exports.addMovie = function(req, res){
     Movie.findOne({'ttNumber': req.body.ttNumber}, {"title":1, 'duration':1}).exec(function (error, result) {
         if(error){
             res.status(400);
-            res.send("Invalid request");
+            res.send({"Error" :"Invalid request"});
         } else {
             if(result == null){
                 var token = req.headers["authentication"];
@@ -37,18 +37,18 @@ module.exports.addMovie = function(req, res){
                         movie.save(function(error, result){
                             if(error) {
                                 res.status(400);
-                                res.send("Couldn't save movie");
+                                res.send({"Error": "Couldn't save movie"});
                             } else {
                                 // console.log(error);
                                 res.status(200);
-                                res.send("Movie was added successfully");
+                                res.send({"Success" : "Movie was added successfully"});
                             }
                         });
                     }
                 });
             } else {
-                res.status(400);
-                res.send("That ttNumber is taken!");
+                res.status(400);1
+                res.json({"Error" : "That ttNumber is taken!"});
             }
         }
     });
@@ -87,4 +87,10 @@ module.exports.getAllMovies = function (req, res) {
             }
         }
     });
-}
+};
+
+module.exports.drop = function () {
+    Movie.remove({}, function (err) {
+        console.log("Movies Dropped");
+    })
+};
