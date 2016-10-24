@@ -23,10 +23,14 @@ function getMovies(){
                 var toAppend = "";
                 toAppend += "<div>";
                 toAppend += $(this)[0].title;
+                //Add poster. Get the ttNumber from the database.
                 toAppend += "</div>";
                 $("#body").append(toAppend);
-
             });
         }
     });
+}
+function getPoster(ttNumber){
+    //Create Ajax call that calls OMDB API
+    //Return <img> tag with proper SRC
 }
