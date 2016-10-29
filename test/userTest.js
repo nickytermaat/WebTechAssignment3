@@ -210,7 +210,7 @@ describe("Add movie to the database", function(){
             .set('authentication', token1)
             .set('Content-Type','application/json')
             .send({
-                "ttNumber" : 232323,
+                "ttNumber" : 3062096,
                 "title": "up",
                 "pubDate" : "12-05-2013",
                 "director" : "Someone",
@@ -228,7 +228,7 @@ describe("Add movie to the database", function(){
             .set('authentication', token1)
             .set('Content-Type','application/json')
             .send({
-                "ttNumber" : 123456,
+                "ttNumber" : 4559006,
                 "title": "Down",
                 "pubDate" : "12-05-2012",
                 "director" : "Someone Else",
@@ -282,7 +282,7 @@ describe("Add rating to the database", function(){
             .set('authentication', token1)
             .set('Content-Type','application/json')
             .send({
-                "ttNumber" : 123456,
+                "ttNumber" : '0438097',
                 "stars" : "2.5"
             })
             .expect("Content-type", /json/)
@@ -296,7 +296,7 @@ describe("Add another rating to the database", function(){
             .set('authentication', token2)
             .set('Content-Type','application/json')
             .send({
-                "ttNumber" : 123456,
+                "ttNumber" : '0438097',
                 "stars" : "4.5"
             })
             .expect("Content-type", /json/)

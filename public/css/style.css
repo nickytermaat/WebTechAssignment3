@@ -1,0 +1,10 @@
+.movie > img{
+    width:100%;
+}
+.movie {
+    border: 1px solid black;
+    height:400px;
+    margin: 5px;
+    padding: 0;
+    overflow: hidden;
+}

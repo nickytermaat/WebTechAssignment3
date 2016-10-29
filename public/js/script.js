@@ -10,7 +10,6 @@ function includeBody() {
 }
 $(document).ready(function(){
     includeHeader();
-    includeBody();
 });
 
 function getMovies(){
@@ -21,16 +20,37 @@ function getMovies(){
             $.each(data, function(index){
                 console.log($(this)[0].title);
                 var toAppend = "";
-                toAppend += "<div>";
-                toAppend += $(this)[0].title;
+                toAppend += "<div class='col-sm-2 movie'>";
+                toAppend += "<a href='/movie?"+$(this)[0].ttNumber+"' class='title'>"+$(this)[0].title+"</a>";
+                toAppend += "<span id='rating"+$(this)[0].ttNumber+"' class='rating'>"+$(this)[0].rating+"</span>";
                 //Add poster. Get the ttNumber from the database.
-                toAppend += "</div>";
-                $("#body").append(toAppend);
+                getPoster($(this)[0].ttNumber, toAppend);
+                // getRating(("#rating"+$(this)[0].ttNumber));
             });
         }
     });
 }
-function getPoster(ttNumber){
+function getPoster(ttNumber, toAppend){
     //Create Ajax call that calls OMDB API
     //Return <img> tag with proper SRC
+        $.ajax({
+            url: "http://omdbapi.com/?i=tt"+ttNumber,
+            type: "GET",
+            success: function(data){
+                toAppend += "<img src='"+data.Poster+"'>";
+                toAppend += "</div>";
+                $("#body").append(toAppend);
+            }
+        });
+}
+
+function login(username, password){
+    $.ajax({
+        url: "/api/login",
+        data: {name: username, password: password},
+        type: "POST",
+        success: function(data){
+            localStorage.setItem("Token", data.Token);
+        }
+    });
 }

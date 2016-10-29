@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="loginForm">
+    <label for="username">Username</label>
+    <input id="username" type="text">
+</div>
+<script>
+    $("#login").click(function(){
+        var username = $("#username").val();
+        var password = $("#password").val();
+        login(username, password);
+    })
+</script>

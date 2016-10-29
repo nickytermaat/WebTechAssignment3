@@ -55,7 +55,7 @@ module.exports.addMovie = function(req, res){
 };
 
 module.exports.getMovie = function(req, res){
-    Movie.findOne({'ttNumber': req.params.ttNumber}, {"title":1, 'duration':1}).exec(function (error, result) {
+    Movie.findOne({'ttNumber': req.params.ttNumber}).exec(function (error, result) {
         if(error){
             res.status(400);
             res.send("Invalid request");
