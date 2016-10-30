@@ -65,10 +65,11 @@
         })
 
         $.ajax({
-            url:"api/getAvgForMovie/tt"+ttNumber,
+            url:"api/getAvgForMovie/"+ttNumber,
             type:"GET",
             success:function(data){
-                $("#yourrating").text(data);
+                console.log(data);
+                $("#yourrating").text(data.Average);
             }
         })
     }
