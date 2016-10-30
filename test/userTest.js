@@ -334,7 +334,7 @@ describe("Add rating to the database with invalid auth", function(){
 });
 describe("Get average rating for movie", function(){
     it("Should give code 200", function(done){
-        server.get("/api/getAvgForMovie/123456")
+        server.get("/api/getAvgForMovie/4559006")
             .set('Content-Type','application/json')
             .expect(200)
             .end(done);

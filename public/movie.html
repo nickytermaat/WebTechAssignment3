@@ -28,6 +28,24 @@
         </div>
     </div>
 </div>
+<div id="addRatingContainer">
+    <form id="addRating" class="form-horizontal" method="post" action="resources/ratingResource/addRating">
+        <div class="control-group">
+            <label class="control-label">Stars</label>
+            <div class="controls">
+                <input required type="Stars" id="stars" class="form-control" name="stars"
+                       placeholder="Stars: add whole or half numbers">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <button type="submit" class="btn btn-success" id="addRatingToMovie">Add rating to movie</button>
+            </div>
+        </div>
+    </form>
+
+</div>
 </body>
 </html>
 <style>
@@ -39,4 +57,10 @@
 </style>
 <script>
     $(document).ready(getMovieData());
+    getAverageForMovie();
+    $(addRatingToMovie).click(function() {
+        $("#username").val();
+        $("#ttNumber").val();
+        addRating(username, ttNumber, stars);
+    })
 </script>

@@ -20,8 +20,9 @@ function getMovies(){
     $.ajax({
         url: "/api/getMovies",
         type: "GET",
-        success: function(data){
-            $.each(data, function(index){
+        success: function (data) {
+            $.each(data, function (index) {
+                console.log($(this)[0].title);
                 var toAppend = "";
                 toAppend += "<div class='col-sm-2 movie'>";
                 toAppend += "<a href='/movie?"+$(this)[0].ttNumber+"' class='title'>"+$(this)[0].title+"</a>";
@@ -64,12 +65,12 @@ function getMovieData(ttNumber){
     $.ajax({
         url: "/api/getMovies/" + ttNumber,
         type: "GET",
-        success: function(data){
+        success: function (data) {
+            console.log(data);
             $("#title").text(data.title);
             $("#duration").text(data.duration);
             $("#director").text(data.director);
             $("#plot").text(data.description);
-            getMyRatingForMovie(data.ttNumber);
         }
     });
 
@@ -139,6 +140,21 @@ function logout(){
     reloadBody();
 }
 
+function checkLogin() {
+    if (localStorage.getItem("Token") != "") {
+        //User is logged in
+        $(".loginForm").hide();
+        $("#registerbtn").hide();//load("../elements/registerbtn.html");
+        $("#logout").show();
+    } else {
+        //User is logged out
+        $("#logout").hide();
+        $(".loginForm").show();
+        $("#registerbtn").show();
+    }
+}
+
+
 function reloadBody(){
     console.log("Not being overwritten");
 }
@@ -169,7 +185,8 @@ function getUser(name, toAppend) {
         url: "/api/getUser/" + name,
         beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
         type: "GET",
-        success: function(data){
+        success: function (data) {
+            console.log(data);
             $("#_id").text(data._id);
             $("#username").text(data.name);
             $("#body").append(toAppend);
@@ -184,13 +201,16 @@ function getAllUsers(){
     $.ajax({
         url:"/api/getUser",
         type: "GET",
-        beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
-        success: function(data){
-            $.each(data, function(index){
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('authentication', localStorage.getItem("Token"))
+        },
+        success: function (data) {
+            $.each(data, function (index) {
+                console.log($(this)[0].name)
                 var toAppend = "";
                 toAppend += "<div class='col-sm-2 user'>";
                 toAppend += "<a href='/user?"+$(this)[0].name+"' class='username'>"+$(this)[0].name+"</a>";
-                toAppend += "<div>";
+                toAppend += "<div>"
                 getUser($(this)[0].name, toAppend);
             });
         },
@@ -200,19 +220,62 @@ function getAllUsers(){
     });
 }
 
+// Rating ---------------------------------------------------------
+function getMyRatings() {
+    $.ajax({
+        url: "/api/getMyRatings",
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('authentication', localStorage.getItem("Token"))
+        },
+        success: function (data) {
+            console.log($(this)[0])
+            var toAppend = "";
+            toAppend += "<div class='col-sm-2 rating'>";
+            toAppend += "<p> My Ratings: "
+            $.each(data, function (index) {
+                console.log($(this)[0])
+                toAppend += "<p> ttNumber: \t " + $(this)[0].ttNumber + "</p>"
+                toAppend += "<p> Your rating \t <a href='/rating?" + $(this)[0].stars + "' class='stars'>" + $(this)[0].stars + "</a>";
+                toAppend += "</div>"
+                $("#body").append(toAppend);
+            })
 
-function checkLogin(){
-    if(localStorage.getItem("Token") != ""){
-        //User is logged in
-        $(".loginForm").hide();
-        $("#registerbtn").hide();//load("../elements/registerbtn.html");
-        $("#logout").show();
-    } else {
-        //User is logged out
-        $("#logout").hide();
-        $(".loginForm").show();
-        $("#registerbtn").show();
+        }
+    });
+}
+
+function getAverageForMovie() {
+    var ttNumber = window.location.search.replace('?', '');
+    $.ajax({
+        url: "api/getAvgForMovie/" + ttNumber,
+        type: "GET",
+        success: function (data) {
+            console.log(data);
+            $("#avgrating").text(data.ttNumber);
+        }
+    });
+}
+
+function addRating(username, ttNumber, stars) {
+
+    var newRating = {
+        username: $("#username").val(),
+        ttNumber: $('#ttNumber').val(),
+        stars: $('#stars').val(),
     }
+
+    $.ajax({
+        type: "POST",
+        url: "/api/addUser",
+        data: newRating,
+        dataType: "JSON",
+        success: function (data) {
+            alert("Rating was added succesfully")
+        }, error: function (err) {
+            alert(err.responseJSON.Error)
+        }
+    });
 }
 
 function getMyRatingForMovie(ttNumber){
