@@ -4,6 +4,8 @@
 function includeHeader(){
     $(".navbar").load("../elements/menu.html");
     $("#login").load("../elements/login.html");
+    $("#logout").load("../elements/logout.html");
+    $("#register").load("../elements/registerbtn.html");
 }
 function includeBody() {
     $("#body").load("../elements/body.html");
@@ -12,6 +14,8 @@ $(document).ready(function(){
     includeHeader();
 });
 
+
+// Movies
 function getMovies(){
     $.ajax({
         url: "/api/getMovies",
@@ -44,6 +48,31 @@ function getPoster(ttNumber, toAppend){
         });
 }
 
+function addMovie(ttNumber, title, pubDate, duration, director, description) {
+   var newMovie = {
+       'ttNumber' : $('#inputTtNumber').val(),
+       'title' : $('#inputTitle').val(),
+       'pubDate' : $('#inputPubDate').val(),
+       'duration' : $('#inputDuration').val(),
+       'director' : $('#inputDirector').val(),
+       'description' : $('#inputDescription').val()
+   }
+
+    $.ajax({
+        type: "POST",
+        url: "api/addMovie",
+        data: newMovie,
+        dataType: "JSON",
+        success: function (data) {
+            alert("Movie was added succesfully")
+        }, error: function (err) {
+            alert(err.responseJSON.Error)
+        }
+    });
+}
+
+
+// Login - log out
 function login(username, password){
     $.ajax({
         url: "/api/login",
@@ -60,6 +89,28 @@ function login(username, password){
 function logout(){
     localStorage.setItem("Token", "");
 }
+
+
+//Users
+function addUser() {
+    var newUser = {
+        'username' : $('#inputUsername').val(),
+        'password' : $('#inputPassword').val()
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/api/addUser",
+        data: newUser,
+        dataType: "JSON",
+        success: function (data) {
+            alert("User was added succesfully")
+        }, error: function (err) {
+            alert(err.responseJSON.Error)
+        }
+    });
+}
+
 function getAllUsers(){
     $.ajax({
         url:"/api/getUser",
@@ -67,5 +118,5 @@ function getAllUsers(){
         success: function(data){
             console.log(data);
         }
-    })
+    });
 }

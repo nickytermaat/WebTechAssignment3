@@ -1,9 +1,19 @@
 <div class="loginForm">
-    <label for="username">Username</label>
+    <form class="navbar-form navbar-right">
+        <div class="form-group">
+            <input type="text" placeholder="Username" class="form-control" id="username">
+        </div>
+        <div class="form-group">
+            <input type="text" placeholder="Password" class="form-control" id="password">
+        </div>
+        <button type="submit" class="btn btn-success" id="loginbutton">Log in</button>
+    </form>
+
+    <!--<label for="username">Username</label>
     <input id="username" type="text">
     <label for="password">Password</label>
     <input id="password" type="password">
-    <button id="loginbutton">Log in</button>
+    <button id="loginbutton">Log in</button>-->
 </div>
 <script>
     $("#loginbutton").click(function(){

@@ -17,14 +17,28 @@
             <li><a href="/Movies">Movies</a></li>
             <li><a href="/Users">Users</a></li>
         </ul>
-    <div id="login">
+        <div id="registerbtn"></div>
+        <div id="logout"></div>
+        <div id="login"></div>
 
-    </div>
+
     </div>
 </div>
 <script>
     var title = $(document)[0].title;
     $("[href = '/"+title+"']").closest("li").addClass("active"); //Set active class on element that is active
 
+
     $("#login").load("../elements/login.html");
+    $("#logout").load("../elements/logout.html");
+    $("#registerbtn").load("../elements/registerbtn.html");
+
+    /*if ( login = true) {
+        show element logout.html
+    } else {
+        show element login.html
+    }*/
+
+
+
 </script>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <!-- Header is included here -->
+</nav>
+<h1>Register here!</h1>
+<h3>An account is needed to use NotFlix</h3>
+<div class="registerform">
+    <form id="registerAccount" class="form-horizontal" method="post" action="resources/userResource/addUser">
+        <div class="control-group">
+            <label class="control-label">Username</label>
+            <div class="col-9">
+                <input required type="text" class="form-control" name="username" placeholder="Username">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Password</label>
+            <div class="controls">
+                <input required type="Password" id="password" class="form-control" name="password"
+                       placeholder="Password">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Confirm Password</label>
+            <div class="controls">
+                <input required type="Password" id="confirmpassword" class="form-control" name="confirmpassword"
+                       placeholder="Confirm password">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <button type="submit" class="btn btn-success" id="createAccountbtn">Create your account</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+</div>
+</body>
+</html>
+<script>
+    $("#createAccountbtn").click(function () {
+        addUser();
+    })
+</script>
