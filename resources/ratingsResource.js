@@ -108,7 +108,29 @@ module.exports.getRatingsForUser = function(req, res){
             res.json({"Error" : error});
         } else {
             Rating.find({userName : result.username}, {'ttNumber': 1, 'stars' : 1}).exec(function(error, result){
-                if(errors){
+                if(error){
+                    res.status(400);
+                    res.json({"Error" : "Bad request!"});
+                } else {
+                    res.json({"Result" : result});
+                }
+            });
+        }
+    });
+};
+/* Added in assignment 4 */
+module.exports.getRatingsForUserForMovie = function(req, res){
+    var token = req.headers["authentication"];
+
+    jwt.verify(token, "Thisismysecretkey", function (error, result) {
+        if (error) {
+            res.status(401);
+            res.json({"Error" : error});
+        } else {
+            console.log(result.username);
+            console.log(req.params.ttNumber);
+            Rating.find({userName : result.username, ttNumber :req.params.ttNumber}, {'ttNumber': 1, 'stars' : 1}).exec(function(error, result){
+                if(error){
                     res.status(400);
                     res.json({"Error" : "Bad request!"});
                 } else {

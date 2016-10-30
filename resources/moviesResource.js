@@ -47,7 +47,7 @@ module.exports.addMovie = function(req, res){
                     }
                 });
             } else {
-                res.status(400);1
+                res.status(400);
                 res.json({"Error" : "That ttNumber is taken!"});
             }
         }

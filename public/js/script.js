@@ -22,15 +22,25 @@ function getMovies(){
         type: "GET",
         success: function(data){
             $.each(data, function(index){
-                console.log($(this)[0].title);
                 var toAppend = "";
                 toAppend += "<div class='col-sm-2 movie'>";
                 toAppend += "<a href='/movie?"+$(this)[0].ttNumber+"' class='title'>"+$(this)[0].title+"</a>";
-                toAppend += "<span id='rating"+$(this)[0].ttNumber+"' class='rating'>"+$(this)[0].rating+"</span>";
-                //Add poster. Get the ttNumber from the database.
+                toAppend += "<span id='rating"+$(this)[0].ttNumber+"' class='rating'></span>";
+                //Add poster. Get the ttNumber from the databas1e.
                 getPoster($(this)[0].ttNumber, toAppend);
                 // getRating(("#rating"+$(this)[0].ttNumber));
+                getAvgRating($(this)[0].ttNumber);
             });
+        }
+    });
+}
+function getAvgRating(ttNumber){
+    $.ajax({
+        url:"api/getAvgForMovie/"+ttNumber,
+        type:"GET",
+        success:function(data){
+            alert();
+            $("#id"+ttNumber).html(determineStars(data.Average));
         }
     });
 }
@@ -55,11 +65,11 @@ function getMovieData(ttNumber){
         url: "/api/getMovies/" + ttNumber,
         type: "GET",
         success: function(data){
-            console.log(data);
             $("#title").text(data.title);
             $("#duration").text(data.duration);
             $("#director").text(data.director);
             $("#plot").text(data.description);
+            getMyRatingForMovie(data.ttNumber);
         }
     });
 
@@ -75,26 +85,26 @@ function getMovieData(ttNumber){
         url:"api/getAvgForMovie/"+ttNumber,
         type:"GET",
         success:function(data){
-            console.log(data);
-            $("#avgrating").text(data.Average);
+            $("#avgrating").html(determineStars(data.Average));
         }
     });
 }
 
 function addMovie(ttNumber, title, pubDate, duration, director, description) {
    var newMovie = {
-       'ttNumber' : $('#inputTtNumber').val(),
-       'title' : $('#inputTitle').val(),
-       'pubDate' : $('#inputPubDate').val(),
-       'duration' : $('#inputDuration').val(),
-       'director' : $('#inputDirector').val(),
-       'description' : $('#inputDescription').val()
-   }
+       ttNumber : $('#ttNumber').val(),
+       title : $('#title').val(),
+       pubDate : $('#pubDate').val(),
+       duration : $('#duration').val(),
+       director : $('#director').val(),
+       description : $('#description').val()
+   };
 
     $.ajax({
         type: "POST",
         url: "api/addMovie",
         data: newMovie,
+        beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
         dataType: "JSON",
         success: function (data) {
             alert("Movie was added succesfully")
@@ -115,6 +125,7 @@ function login(username, password){
             localStorage.setItem("Token", data.Token);
             alert("Login successful");
             checkLogin();
+            reloadBody();
         }, error: function(err){
             alert(err.responseJSON.Error);
             $(".navbar-form").addClass("has-error");
@@ -125,9 +136,12 @@ function login(username, password){
 function logout(){
     localStorage.setItem("Token", "");
     checkLogin();
+    reloadBody();
 }
 
-
+function reloadBody(){
+    console.log("Not being overwritten");
+}
 //Users
 function addUser(username, password) {
     var newUser = {
@@ -156,10 +170,12 @@ function getUser(name, toAppend) {
         beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
         type: "GET",
         success: function(data){
-            console.log(data);
             $("#_id").text(data._id);
             $("#username").text(data.name);
             $("#body").append(toAppend);
+        },
+        error: function(err){
+            $("#body").load("../elements/401.html");
         }
     });
 }
@@ -171,13 +187,15 @@ function getAllUsers(){
         beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
         success: function(data){
             $.each(data, function(index){
-                console.log($(this)[0].name)
                 var toAppend = "";
                 toAppend += "<div class='col-sm-2 user'>";
                 toAppend += "<a href='/user?"+$(this)[0].name+"' class='username'>"+$(this)[0].name+"</a>";
-                toAppend += "<div>"
+                toAppend += "<div>";
                 getUser($(this)[0].name, toAppend);
             });
+        },
+        error: function(err){
+            $("#body").load("../elements/401.html");
         }
     });
 }
@@ -194,5 +212,43 @@ function checkLogin(){
         $("#logout").hide();
         $(".loginForm").show();
         $("#registerbtn").show();
+    }
+}
+
+function getMyRatingForMovie(ttNumber){
+    $.ajax({
+        url:"/api/getMyRatingForMovie/"+ttNumber,
+        beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
+        success: function(data){
+            if(typeof data.Result[0] != 'undefined'){
+                $("#yourrating").html(determineStars(data.Result[0].stars));
+            }
+        }
+    })
+}
+
+function determineStars(value){
+    if(value > 0 && value <=.5){
+        return '<i class="fa fa-star-half fa-lg"></i>';
+    } else if(value > .5 && value <= 1){
+        return '<i class="fa fa-star fa-lg"></i>';
+    } else if(value > 1.0 && value <= 1.5){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star-half fa-lg"></i>';
+    } else if(value > 1.5 && value <= 2.0){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i>';
+    } else if(value > 2.0 && value <= 2.5){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star-half fa-lg"></i>';
+    } else if(value > 2.5 && value <= 3.0){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i>';
+    } else if(value > 3.0 && value <= 3.5){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star-half fa-lg"></i>';
+    }else if(value > 3.5 && value <= 4.0){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i>';
+    } else if(value > 4.0 && value <= 4.5){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star-half fa-lg"></i>';
+    }else if(value > 4.5 && value <= 5){
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i>';
+    } else {
+        return "<i>No ratings yet</i>";
     }
 }
