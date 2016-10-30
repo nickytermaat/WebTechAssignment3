@@ -41,7 +41,7 @@ module.exports.updateRating = function(req, res){
             var update = {
                 "stars" : req.body.stars
             }
-            Rating.update(conditions, update).exec(function(error, result){
+            Rating.update(conditions, update, {upsert:true}).exec(function(error, result){
                 if(error){
                     res.status(400);
                     res.json({"Error" : "bad request."});

@@ -63,9 +63,10 @@
         getMovieData();
     }
     getAverageForMovie();
+
     $(addRatingToMovie).click(function() {
         var ttNumber = window.location.search.replace("?", "");
         var stars = $("#stars").val();
         addRating(ttNumber, stars);
-    })
+    });
 </script>
