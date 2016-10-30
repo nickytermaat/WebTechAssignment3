@@ -282,7 +282,7 @@ describe("Add rating to the database", function(){
             .set('authentication', token1)
             .set('Content-Type','application/json')
             .send({
-                "ttNumber" : '0438097',
+                "ttNumber" : '4559006',
                 "stars" : "2.5"
             })
             .expect("Content-type", /json/)
@@ -296,7 +296,7 @@ describe("Add another rating to the database", function(){
             .set('authentication', token2)
             .set('Content-Type','application/json')
             .send({
-                "ttNumber" : '0438097',
+                "ttNumber" : '4559006',
                 "stars" : "4.5"
             })
             .expect("Content-type", /json/)
