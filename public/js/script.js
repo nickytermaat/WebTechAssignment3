@@ -114,6 +114,7 @@ function login(username, password){
         success: function(data){
             localStorage.setItem("Token", data.Token);
             alert("Login successful");
+            checkLogin();
         }, error: function(err){
             alert(err.responseJSON.Error);
         }
@@ -121,6 +122,7 @@ function login(username, password){
 }
 function logout(){
     localStorage.setItem("Token", "");
+    checkLogin();
 }
 
 
@@ -179,3 +181,14 @@ function getAllUsers(){
 }
 
 
+function checkLogin(){
+    if(localStorage.getItem("Token") != ""){
+        //User is logged in
+        $(".loginForm").hide();
+        $("#registerbtn").hide();//load("../elements/registerbtn.html");
+
+    } else {
+        //User is logged out
+        $("#logout").hide();
+    }
+}
