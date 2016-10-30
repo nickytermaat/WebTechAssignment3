@@ -62,15 +62,15 @@
             success:function(data){
                 $(".poster").append("<img src='"+data.Poster+"'>");
             }
-        })
+        });
 
         $.ajax({
             url:"api/getAvgForMovie/"+ttNumber,
             type:"GET",
             success:function(data){
                 console.log(data);
-                $("#yourrating").text(data.Average);
+                $("#avgrating").text(data.Average);
             }
-        })
+        });
     }
 </script>
