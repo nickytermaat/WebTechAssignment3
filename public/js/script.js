@@ -51,6 +51,21 @@ function login(username, password){
         type: "POST",
         success: function(data){
             localStorage.setItem("Token", data.Token);
+            alert("Login successful");
+        }, error: function(err){
+            alert(err.responseJSON.Error);
         }
     });
+}
+function logout(){
+    localStorage.setItem("Token", "");
+}
+function getAllUsers(){
+    $.ajax({
+        url:"/api/getUser",
+        beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
+        success: function(data){
+            console.log(data);
+        }
+    })
 }

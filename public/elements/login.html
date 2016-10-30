@@ -1,9 +1,12 @@
 <div class="loginForm">
     <label for="username">Username</label>
     <input id="username" type="text">
+    <label for="password">Password</label>
+    <input id="password" type="password">
+    <button id="loginbutton">Log in</button>
 </div>
 <script>
-    $("#login").click(function(){
+    $("#loginbutton").click(function(){
         var username = $("#username").val();
         var password = $("#password").val();
         login(username, password);
