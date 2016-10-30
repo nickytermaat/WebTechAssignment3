@@ -24,13 +24,16 @@ function getMovies(){
             $.each(data, function (index) {
                 console.log($(this)[0].title);
                 var toAppend = "";
-                toAppend += "<div class='col-sm-2 movie'>";
+                toAppend += "<div class='col-xs-12 col-sm-6 col-md-4 col-lg-2 movie'>";
+                toAppend += "<div class='innermovie'>";
+                toAppend += "<div class='topbar'>";
                 toAppend += "<a href='/movie?"+$(this)[0].ttNumber+"' class='title'>"+$(this)[0].title+"</a>";
                 toAppend += "<span id='rating"+$(this)[0].ttNumber+"' class='rating'></span>";
+                toAppend += "</div>";
+                toAppend += "</div>";
                 //Add poster. Get the ttNumber from the databas1e.
                 getPoster($(this)[0].ttNumber, toAppend);
                 // getRating(("#rating"+$(this)[0].ttNumber));
-                getAvgRating($(this)[0].ttNumber);
             });
         }
     });
@@ -40,8 +43,9 @@ function getAvgRating(ttNumber){
         url:"api/getAvgForMovie/"+ttNumber,
         type:"GET",
         success:function(data){
-            alert();
-            $("#id"+ttNumber).html(determineStars(data.Average));
+            $("#rating"+ttNumber).html(determineStars(data.Average));
+        }, error:function (data) {
+            $("#rating"+ttNumber).html(determineStars(2.5));
         }
     });
 }
@@ -55,6 +59,8 @@ function getPoster(ttNumber, toAppend){
                 toAppend += "<img src='"+data.Poster+"'>";
                 toAppend += "</div>";
                 $("#body").append(toAppend);
+                getAvgRating(ttNumber);
+
             }
         });
 }
@@ -87,8 +93,12 @@ function getMovieData(ttNumber){
         type:"GET",
         success:function(data){
             $("#avgrating").html(determineStars(data.Average));
+        }, error:function(error){
+            $("#avgrating").html(determineStars());
         }
     });
+
+    getMyRatingForMovie(ttNumber);
 }
 
 function addMovie(ttNumber, title, pubDate, duration, director, description) {
@@ -257,21 +267,23 @@ function getAverageForMovie() {
     });
 }
 
-function addRating(username, ttNumber, stars) {
+function addRating(ttNumber, stars) {
 
     var newRating = {
-        username: $("#username").val(),
-        ttNumber: $('#ttNumber').val(),
-        stars: $('#stars').val(),
-    }
+        ttNumber: ttNumber,
+        stars: stars
+    };
 
     $.ajax({
         type: "POST",
-        url: "/api/addUser",
+        url: "/api/addRating",
         data: newRating,
+        beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
+
         dataType: "JSON",
         success: function (data) {
-            alert("Rating was added succesfully")
+            alert("Rating was added succesfully");
+            getMovieData(ttNumber);
         }, error: function (err) {
             alert(err.responseJSON.Error)
         }
@@ -312,6 +324,6 @@ function determineStars(value){
     }else if(value > 4.5 && value <= 5){
         return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i>';
     } else {
-        return "<i>No ratings yet</i>";
+        return '<i class="fa fa-star fa-lg"></i><i class="fa fa-star fa-lg"></i><i class="fa fa-star-half fa-lg"></i>';
     }
 }

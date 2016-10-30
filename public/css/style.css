@@ -1,17 +1,19 @@
 .movie > img{
     width:100%;
 }
-.movie {
+.innermovie {
     border: 1px solid black;
+}
+.movie {
     height:400px;
-    margin: 5px;
-    padding: 0;
+    /*margin: 5px;*/
+    padding: 5px;
     overflow: hidden;
 }
 
 #addMovieContainer {
     background: lightgrey;
-    height: 80px;
+    margin: 15px 0;
     text-align: center;
 }
 
@@ -22,4 +24,9 @@
 
 .error-label{
     display:none;
+}
+
+.rating{
+    float: right;
+    margin-right: 5px;
 }

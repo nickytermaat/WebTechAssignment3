@@ -29,7 +29,7 @@
     </div>
 </div>
 <div id="addRatingContainer">
-    <form id="addRating" class="form-horizontal" method="post" action="resources/ratingResource/addRating">
+    <div id="addRating" class="form-horizontal">
         <div class="control-group">
             <label class="control-label">Stars</label>
             <div class="controls">
@@ -43,7 +43,7 @@
                 <button type="submit" class="btn btn-success" id="addRatingToMovie">Add rating to movie</button>
             </div>
         </div>
-    </form>
+    </div>
 
 </div>
 </body>
@@ -57,10 +57,15 @@
 </style>
 <script>
     $(document).ready(getMovieData());
+    function reloadBody(){
+        $(".poster").html("");
+        $("#yourrating").html("");
+        getMovieData();
+    }
     getAverageForMovie();
     $(addRatingToMovie).click(function() {
-        $("#username").val();
-        $("#ttNumber").val();
-        addRating(username, ttNumber, stars);
+        var ttNumber = window.location.search.replace("?", "");
+        var stars = $("#stars").val();
+        addRating(ttNumber, stars);
     })
 </script>
