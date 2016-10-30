@@ -40,7 +40,7 @@ module.exports.updateRating = function(req, res){
             };
             var update = {
                 "stars" : req.body.stars
-            }
+            };
             Rating.update(conditions, update, {upsert:true}).exec(function(error, result){
                 if(error){
                     res.status(400);

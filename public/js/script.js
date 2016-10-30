@@ -266,7 +266,19 @@ function getAverageForMovie() {
         }
     });
 }
-
+function deleteRating(ttNumber){
+    $.ajax({
+        type: "DELETE",
+        url: "/api/deleteRating",
+        beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
+        data:{ttNumber:ttNumber}
+    }).done(function(){
+        alert("Rating was deleted succesfully");
+        $(".poster").html("");
+        getMovieData(ttNumber);
+        $("#yourrating").html("");
+    });
+};
 function addRating(ttNumber, stars) {
 
     var newRating = {
@@ -275,14 +287,15 @@ function addRating(ttNumber, stars) {
     };
 
     $.ajax({
-        type: "POST",
-        url: "/api/addRating",
+        type: "PUT",
+        url: "/api/updateRating",
         data: newRating,
         beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
 
         dataType: "JSON",
         success: function (data) {
             alert("Rating was added succesfully");
+            $(".poster").html("");
             getMovieData(ttNumber);
         }, error: function (err) {
             alert(err.responseJSON.Error)

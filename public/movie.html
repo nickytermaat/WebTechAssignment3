@@ -41,6 +41,7 @@
             <label class="control-label"></label>
             <div class="controls">
                 <button type="submit" class="btn btn-success" id="addRatingToMovie">Add rating to movie</button>
+                <button type="submit" class="btn btn-success" id="deleteRating">Delete rating </button>
             </div>
         </div>
     </div>
@@ -64,9 +65,13 @@
     }
     getAverageForMovie();
 
-    $(addRatingToMovie).click(function() {
+    $("#addRatingToMovie").click(function() {
         var ttNumber = window.location.search.replace("?", "");
         var stars = $("#stars").val();
         addRating(ttNumber, stars);
+    });
+    $("#deleteRating").click(function() {
+        var ttNumber = window.location.search.replace("?", "");
+        deleteRating(ttNumber);
     });
 </script>
