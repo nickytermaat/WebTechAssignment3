@@ -1,13 +1,14 @@
 <div class="loginForm">
-    <form class="navbar-form navbar-right">
+    <div class="navbar-form navbar-right">
         <div class="form-group">
-            <input type="text" placeholder="Username" class="form-control" id="username">
+            <label class="control-label error-label" for="username">Input with error</label>
+            <input type="text" data-msg="tetst" placeholder="Username" class="form-control" id="username">
         </div>
         <div class="form-group">
-            <input type="text" placeholder="Password" class="form-control" id="password">
+            <input type="password" placeholder="Password" class="form-control" id="password">
         </div>
-        <button type="submit" class="btn btn-success" id="loginbutton">Log in</button>
-    </form>
+        <button class="btn btn-success" id="loginbutton">Log in</button>
+    </div>
 
     <!--<label for="username">Username</label>
     <input id="username" type="text">
@@ -19,6 +20,8 @@
     $("#loginbutton").click(function(){
         var username = $("#username").val();
         var password = $("#password").val();
+        $("#username").val("");
+        $("#password").val("");
         login(username, password);
     });
     $(document).ready(function(){

@@ -117,6 +117,8 @@ function login(username, password){
             checkLogin();
         }, error: function(err){
             alert(err.responseJSON.Error);
+            $(".navbar-form").addClass("has-error");
+            $(".error-label").show();
         }
     });
 }
@@ -131,7 +133,7 @@ function addUser(username, password) {
     var newUser = {
         'username' : $('#inputUsername').val(),
         'password' : $('#inputPassword').val()
-    }
+    };
 
     $.ajax({
         type: "POST",
@@ -186,9 +188,11 @@ function checkLogin(){
         //User is logged in
         $(".loginForm").hide();
         $("#registerbtn").hide();//load("../elements/registerbtn.html");
-
+        $("#logout").show();
     } else {
         //User is logged out
         $("#logout").hide();
+        $(".loginForm").show();
+        $("#registerbtn").show();
     }
 }
