@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AddMovie</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <!-- Header is included here -->
+</nav>
+<h1>Add your movie!</h1>
+<h3>All your recommendations are welcome</h3>
+<div class="addmovieform">
+    <form id="movieform" class="form-horizontal" method="post" action="resources/movieResource/addMovie">
+        <div class="control-group">
+            <label class="control-label">Number (You can find the ttNumber at imdb) </label>
+            <div class="col-9">
+                <input required type="text" class="form-control" name="ttNumber" placeholder="ttNumber">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Password</label>
+            <div class="controls">
+                <input required type="Title" id="title" class="form-control" name="title" placeholder="Title">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Confirm Password</label>
+            <div class="controls">
+                <input required type="pubDate" id="pubDate" class="form-control" name="pubDate"
+                       placeholder="publication date">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Confirm Password</label>
+            <div class="controls">
+                <input required type="duration" id="duration" class="form-control" name="duration"
+                       placeholder="duration">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Confirm Password</label>
+            <div class="controls">
+                <input required type="director" id="director" class="form-control" name="director"
+                       placeholder="director">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Confirm Password</label>
+            <div class="controls">
+                <input required type="description" id="description" class="form-control" name="description"
+                       placeholder="description">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <button type="submit" class="btn btn-success" id="addMovieButton">Add your movie</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+</div>
+</body>
+</html>
+<script>
+    $("#addMovieButton").click(function () {
+        var ttNumber = $("#ttNumber").val();
+        var title = $("#title").val();
+        var pubDate = $("#pubDate").val();
+        var duration = $("#duration").val();
+        var director = $("#director").val();
+        var description = $("#description").val();
+        addMovie(ttNumber, title, pubDate, duration, director, description);
+    })
+</script>

@@ -9,6 +9,13 @@
     overflow: hidden;
 }
 
+#addMovieContainer {
+    background: lightgrey;
+    height: 80px;
+    text-align: center;
+}
+
+
 #login{
     float:right;
     margin:15px;

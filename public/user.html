@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Movie</title>
+    <title>User</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css" >
     <link rel="stylesheet" type="text/css" href="css/style.css" >
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" >
@@ -14,17 +14,10 @@
     <!-- Header is included here -->
 </nav>
 <div id="body">
-    <div class="movieInfo">
-        <div class="col-sm-12 col-md-3 poster">
-
-        </div>
+    <div class="userInfo">
         <div class="col-sm-12 col-md-9 info">
-            <span class="bold">Title:</span><span id="title"></span><br>
-            <span class="bold">Duration:</span><span id="duration"></span><br>
-            <span class="bold">Director:</span><span id="director"></span><br>
-            <span class="bold">Plot:</span><span id="plot"></span><br>
-            <span class="bold">Your rating:</span><span id="yourrating"></span><br>
-            <span class="bold">Average rating:</span><span id="avgrating"></span><br>
+            <span class="bold">ID:</span><span id="_id"></span><br>
+            <span class="bold">Username:</span><span id="username"></span><br>
         </div>
     </div>
 </div>
@@ -38,5 +31,5 @@
     }
 </style>
 <script>
-    $(document).ready(getMovieData());
+    $(document).ready(getUser());
 </script>

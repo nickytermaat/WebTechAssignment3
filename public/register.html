@@ -50,6 +50,8 @@
 </html>
 <script>
     $("#createAccountbtn").click(function () {
-        addUser();
+        var username = $("#username").val();
+        var password = $("#password").val();
+        addUser(username, password);
     })
 </script>

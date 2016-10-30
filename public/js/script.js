@@ -48,6 +48,39 @@ function getPoster(ttNumber, toAppend){
         });
 }
 
+function getMovieData(ttNumber){
+    var ttNumber = window.location.search.replace('?', '');
+
+    $.ajax({
+        url: "/api/getMovies/" + ttNumber,
+        type: "GET",
+        success: function(data){
+            console.log(data);
+            $("#title").text(data.title);
+            $("#duration").text(data.duration);
+            $("#director").text(data.director);
+            $("#plot").text(data.description);
+        }
+    });
+
+    $.ajax({
+        url:"http://omdbapi.com?i=tt" + ttNumber,
+        type:"GET",
+        success:function(data){
+            $(".poster").append("<img src='"+data.Poster+"'>");
+        }
+    });
+
+    $.ajax({
+        url:"api/getAvgForMovie/"+ttNumber,
+        type:"GET",
+        success:function(data){
+            console.log(data);
+            $("#avgrating").text(data.Average);
+        }
+    });
+}
+
 function addMovie(ttNumber, title, pubDate, duration, director, description) {
    var newMovie = {
        'ttNumber' : $('#inputTtNumber').val(),
@@ -92,7 +125,7 @@ function logout(){
 
 
 //Users
-function addUser() {
+function addUser(username, password) {
     var newUser = {
         'username' : $('#inputUsername').val(),
         'password' : $('#inputPassword').val()
@@ -111,12 +144,38 @@ function addUser() {
     });
 }
 
-function getAllUsers(){
+function getUser(name, toAppend) {
+    var name = window.location.search.replace('?', '');
+
     $.ajax({
-        url:"/api/getUser",
+        url: "/api/getUser/" + name,
         beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
+        type: "GET",
         success: function(data){
             console.log(data);
+            $("#_id").text(data._id);
+            $("#username").text(data.name);
+            $("#body").append(toAppend);
         }
     });
 }
+
+function getAllUsers(){
+    $.ajax({
+        url:"/api/getUser",
+        type: "GET",
+        beforeSend: function(xhr){xhr.setRequestHeader('authentication', localStorage.getItem("Token"))},
+        success: function(data){
+            $.each(data, function(index){
+                console.log($(this)[0].name)
+                var toAppend = "";
+                toAppend += "<div class='col-sm-2 user'>";
+                toAppend += "<a href='/user?"+$(this)[0].name+"' class='username'>"+$(this)[0].name+"</a>";
+                toAppend += "<div>"
+                getUser($(this)[0].name, toAppend);
+            });
+        }
+    });
+}
+
+
