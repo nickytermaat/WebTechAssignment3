@@ -9,7 +9,7 @@
  }
  });
  */
-var Movie = require('movieSchema.js');
+var Movie = require('MovieSchema.js');
 var jwt = require("jsonwebtoken");
 
 module.exports.addMovie = function(req, res){
